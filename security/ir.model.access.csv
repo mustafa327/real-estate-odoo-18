@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_estate_building_user,access.estate.building.user,model_estate_building,base.group_user,1,1,1,1
+access_estate_building_unit_user,access.estate.building.unit.user,model_estate_building_unit,base.group_user,1,1,1,1
+access_rent_contract_user,access.rent.contract.user,model_rent_contract,base.group_user,1,1,1,1

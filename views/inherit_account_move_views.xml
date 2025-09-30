@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <record id="view_move_form_inherit_estate" model="ir.ui.view">
+    <field name="name">account.move.form.inherit.estate</field>
+    <field name="model">account.move</field>
+    <field name="inherit_id" ref="account.view_move_form"/>
+    <field name="arch" type="xml">
+      <xpath expr="//sheet//group" position="inside">
+        <group string="بيانات البناية">
+          <field name="x_building_id"/>
+          <field name="x_unit_id"/>
+          <field name="x_floor"/>
+          <field name="x_unit_number"/>
+        </group>
+      </xpath>
+    </field>
+  </record>
+
+  <record id="view_move_line_list_inherit_estate" model="ir.ui.view">
+    <field name="name">account.move.line.list.inherit.estate</field>
+    <field name="model">account.move.line</field>
+    <field name="inherit_id" ref="account.view_move_line_tree"/>
+    <field name="arch" type="xml">
+      <xpath expr="//list|//tree" position="attributes">
+        <attribute name="create">false</attribute>
+      </xpath>
+      <xpath expr="//list/field[@name='account_id']|//tree/field[@name='account_id']" position="after">
+        <field name="x_building_id"/>
+        <field name="x_unit_id"/>
+        <field name="x_floor"/>
+        <field name="x_unit_number"/>
+      </xpath>
+    </field>
+  </record>
+</odoo>

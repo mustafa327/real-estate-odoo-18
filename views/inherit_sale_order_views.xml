@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <record id="view_order_form_inherit_estate" model="ir.ui.view">
+    <field name="name">sale.order.form.inherit.estate</field>
+    <field name="model">sale.order</field>
+    <field name="inherit_id" ref="sale.view_order_form"/>
+    <field name="arch" type="xml">
+      <xpath expr="//sheet//group" position="inside">
+        <group string="بيانات البناية (للفاتورة)">
+          <field name="x_building_id"/>
+          <field name="x_unit_id"/>
+          <field name="x_floor"/>
+          <field name="x_unit_number"/>
+        </group>
+      </xpath>
+    </field>
+  </record>
+</odoo>

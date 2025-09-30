@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <!-- List View -->
+  <record id="view_rent_contract_list" model="ir.ui.view">
+    <field name="name">rent.contract.list</field>
+    <field name="model">rent.contract</field>
+    <field name="arch" type="xml">
+      <list>
+        <field name="name"/>
+        <field name="partner_id"/>
+        <field name="building_id"/>
+        <field name="unit_id"/>
+        <field name="amount"/>
+        <field name="recurrence"/>
+        <field name="start_date"/>
+        <field name="end_date"/>
+        <field name="state"/>
+      </list>
+    </field>
+  </record>
+
+  <!-- Form View -->
+    <record id="view_rent_contract_form" model="ir.ui.view">
+      <field name="name">rent.contract.form</field>
+      <field name="model">rent.contract</field>
+      <field name="arch" type="xml">
+        <form string="Rent Contract">
+          <header>
+            <button name="action_set_active"  type="object" string="تفعيل"  class="btn-primary" invisible="state != 'draft'"/>
+            <button name="action_set_expired" type="object" string="إنهاء"   invisible="state != 'active'"/>
+            <button name="action_cancel"      type="object" string="إلغاء"   invisible="not (state in ['draft','active'])"/>
+            <button name="action_create_invoice" type="object" string="إنشاء فاتورة" class="btn-secondary" invisible="state != 'active'"/>
+            <button name="action_view_invoices"  type="object" string="عرض الفواتير"/>
+            <field name="state" widget="statusbar" statusbar_visible="draft,active,expired,cancelled"/>
+          </header>
+
+          <sheet>
+            <group>
+              <group>
+                <field name="partner_id"/>
+                <field name="building_id"/>
+                <field name="unit_id"/>
+                <field name="company_id"/>
+              </group>
+              <group>
+                <field name="amount"/>
+                <field name="recurrence"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+              </group>
+            </group>
+
+            <group string="Rent Reminder">
+              <field name="rent_due_day"/>
+              <field name="responsible_id"/>
+              <field name="last_due_activity_date" readonly="1"/>
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+  <!-- Action -->
+  <record id="action_rent_contracts" model="ir.actions.act_window">
+    <field name="name">Rent Contracts</field>
+    <field name="res_model">rent.contract</field>
+    <field name="view_mode">list,form,graph,pivot</field>
+  </record>
+</odoo>

@@ -1,0 +1,6 @@
+<odoo>
+  <menuitem id="menu_estate_root" name="العقارات" sequence="20"/>
+  <menuitem id="menu_estate_buildings" name="البنايات" parent="menu_estate_root" sequence="10" action="action_estate_buildings"/>
+  <menuitem id="menu_estate_units" name="الوحدات" parent="menu_estate_root" sequence="20" action="action_estate_units"/>
+  <menuitem id="menu_rent_contracts" name="عقود الإيجار" parent="menu_estate_root" sequence="30" action="action_rent_contracts"/>
+</odoo>

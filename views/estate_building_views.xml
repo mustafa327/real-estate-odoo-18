@@ -1,0 +1,90 @@
+<odoo>
+  <record id="view_estate_building_tree" model="ir.ui.view">
+    <field name="name">estate.building.tree</field>
+    <field name="model">estate.building</field>
+    <field name="arch" type="xml">
+      <list>
+        <field name="name"/>
+        <field name="code"/>
+        <field name="company_id"/>
+        <field name="revenue_monthly_expected"/>
+        <field name="revenue_yearly_expected"/>
+        <field name="unit_count"/>
+        <field name="contract_count"/>
+      </list>
+    </field>
+  </record>
+
+  <record id="view_estate_building_form" model="ir.ui.view">
+    <field name="name">estate.building.form</field>
+    <field name="model">estate.building</field>
+    <field name="arch" type="xml">
+      <form string="Building">
+        <header>
+          <!-- <button name="action_view_units" type="object" class="oe_stat_button" icon="fa-home" string="الوحدات"/>
+          <button name="action_view_contracts" type="object" class="oe_stat_button" icon="fa-file-text" string="العقود"/> -->
+
+
+        </header>
+
+        <sheet>
+          <div class="oe_button_box" name="button_box">
+            <button type="object" name="action_view_units" class="oe_stat_button" icon="fa-th-large">
+              <field name="unit_count" widget="statinfo" string="الوحدات"/>
+            </button>
+            <button type="object" name="action_view_contracts" class="oe_stat_button" icon="fa-file-text-o">
+              <field name="contract_count" widget="statinfo" string="العقود"/>
+            </button>
+          </div>
+          <group>
+            <group>
+              <field name="name"/>
+              <field name="code"/>
+              <field name="company_id"/>
+            </group>
+            <group>
+              <field name="street"/>
+              <field name="city"/>
+              <field name="state_id"/>
+              <field name="country_id"/>
+            </group>
+          </group>
+
+          <group>
+            <group>
+              <field name="revenue_monthly_expected" readonly="1"/>
+              <field name="revenue_yearly_expected" readonly="1"/>
+            </group>
+          </group>
+
+          <notebook>
+            <page string="الوحدات">
+              <field name="unit_ids">
+                <list editable="bottom"> <!-- ✅ list بدل tree -->
+                  <field name="name"/>
+                  <field name="floor"/>
+                  <field name="unit_number"/>
+                  <field name="department_id"/>
+                  <field name="tenant_id"/>
+                  <field name="occupied"/>
+                </list>
+              </field>
+            </page>
+
+            <page string="الأقسام داخل البناية">
+              <field name="department_ids"/>
+            </page>
+          </notebook>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <!-- وتأكد أن الـ action يستخدم view_mode= "list,form,kanban" -->
+  <record id="action_estate_buildings" model="ir.actions.act_window">
+    <field name="name">Buildings</field>
+    <field name="res_model">estate.building</field>
+    <field name="view_mode">list,form,kanban</field>
+  </record>
+
+</odoo>
