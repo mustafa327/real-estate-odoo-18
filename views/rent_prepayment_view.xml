@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <!-- List & Form for Advance Payments -->
+  <record id="view_rent_prepayment_tree" model="ir.ui.view">
+    <field name="name">rent.prepayment.tree</field>
+    <field name="model">rent.prepayment</field>
+    <field name="arch" type="xml">
+      <list>
+        <field name="date"/>
+        <field name="contract_id"/>
+        <field name="months"/>
+        <field name="amount"/>
+        <field name="amount_consumed" string="Consumed"/>
+        <field name="balance"/>
+        <field name="move_id"/>
+        <field name="description"/>
+      </list>
+    </field>
+  </record>
+
+  <record id="view_rent_prepayment_form" model="ir.ui.view">
+    <field name="name">rent.prepayment.form</field>
+    <field name="model">rent.prepayment</field>
+    <field name="arch" type="xml">
+      <form string="Advance Payment">
+        <sheet>
+          <group>
+            <field name="date"/>
+            <field name="contract_id" required="1"/>
+          </group>
+          <group>
+            <field name="months"/>
+            <field name="amount"/>
+            <field name="currency_id" invisible="1"/>
+          </group>
+          <group>
+            <field name="move_id" readonly="1"/>
+            <field name="description"/>
+          </group>
+          <group string="Tracking" invisible="'amount_consumed' == 0.0">
+            <field name="amount_consumed" readonly="1"/>
+            <field name="balance" readonly="1"/>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <!-- Optional action/menu (safe to keep or remove) -->
+  <record id="action_rent_prepayment" model="ir.actions.act_window">
+    <field name="name">Advance Payments</field>
+    <field name="res_model">rent.prepayment</field>
+    <field name="view_mode">list,form</field>
+  </record>
+
+  <menuitem id="menu_rent_prepayment_root"
+            name="Advance Payments"
+            parent="estate_rent_mgmt.menu_estate_root"
+            action="action_rent_prepayment"
+            sequence="60"/>
+
+  <!-- Inherit Contract form: add notebook pages INSIDE <sheet> -->
+  <record id="view_rent_contract_form_inherit_prepay" model="ir.ui.view">
+    <field name="name">rent.contract.form.prepayment</field>
+    <field name="model">rent.contract</field>
+    <!-- IMPORTANT: fully qualified ref to avoid lookup issues -->
+    <field name="inherit_id" ref="estate_rent_mgmt.view_rent_contract_form"/>
+    <field name="arch" type="xml">
+      <xpath expr="//sheet" position="inside">
+        <notebook>
+          <page string="Advance Payments / دفعات مقدّمة">
+            <group>
+              <button name="action_create_prepayment_invoice" type="object"
+                      string="Create Prepayment Invoice" class="oe_highlight"/>
+            </group>
+            <field name="prepayment_ids" >
+              <list editable="bottom">
+                <field name="date"/>
+                <field name="months"/>
+                <field name="amount"/>
+                <field name="amount_consumed" readonly="1"/>
+                <field name="balance" readonly="1"/>
+                <field name="move_id"/>
+                <field name="description"/>
+              </list>
+            </field>
+          </page>
+
+          <page string="Prepayment Consumption">
+            <field name="prepayment_consumption_ids" readonly="1">
+              <list>
+                <field name="invoice_id"/>
+                <field name="prepayment_id"/>
+                <field name="amount"/>
+              </list>
+            </field>
+          </page>
+        </notebook>
+      </xpath>
+    </field>
+  </record>
+
+</odoo>

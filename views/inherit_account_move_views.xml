@@ -7,6 +7,7 @@
     <field name="arch" type="xml">
       <xpath expr="//sheet//group" position="inside">
         <group string="بيانات البناية">
+          <field name="x_owner_id" options="{'no_create': False}"/>
           <field name="x_building_id"/>
           <field name="x_unit_id"/>
           <field name="x_floor"/>

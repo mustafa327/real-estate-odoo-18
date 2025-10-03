@@ -12,6 +12,9 @@
           <field name="x_floor" readonly="1"/>
           <field name="x_unit_number" readonly="1"/>
         </group>
+        <group string="Property">
+          <field name="is_property_owner"/>
+        </group>
       </xpath>
     </field>
   </record>

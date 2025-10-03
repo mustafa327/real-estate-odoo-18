@@ -9,6 +9,7 @@ class EstateBuilding(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
 
     name = fields.Char(string='اسم البناية / Building', required=True, tracking=True)
+    owner_id = fields.Many2one('res.partner', string="Owner (Building) / مالك البناية", domain=[('is_property_owner', '=', True)])
     code = fields.Char(string='كود', tracking=True)
     street = fields.Char(string='العنوان')
     city = fields.Char()
@@ -58,7 +59,6 @@ class EstateBuilding(models.Model):
                     else:
                         yearly += c.amount
                         monthly += c.amount / 12.0
-            # ✅ must ALWAYS assign
             b.revenue_monthly_expected = monthly
             b.revenue_yearly_expected = yearly
 
@@ -77,7 +77,7 @@ class EstateBuilding(models.Model):
             'type': 'ir.actions.act_window',
             'name': _('Rent Contracts'),
             'res_model': 'rent.contract',
-            'view_mode': 'list,form,graph,pivot',  # v18 uses "list" not "tree"
+            'view_mode': 'list,form,graph,pivot',
             'domain': [('building_id', '=', self.id)],
             'context': {'default_building_id': self.id},
         }

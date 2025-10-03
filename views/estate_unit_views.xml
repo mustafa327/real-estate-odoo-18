@@ -5,6 +5,7 @@
     <field name="arch" type="xml">
       <list>
         <field name="name"/>
+        <field name="owner_id"/>
         <field name="building_id"/>
         <field name="floor"/>
         <field name="unit_number"/>
@@ -24,6 +25,7 @@
           <group>
             <group>
               <field name="name"/>
+              <field name="owner_id"/>
               <field name="building_id"/>
               <field name="floor"/>
               <field name="unit_number"/>
@@ -58,5 +60,45 @@
     <field name="name">Units</field>
     <field name="res_model">estate.building.unit</field>
     <field name="view_mode">list,form,kanban,graph,pivot</field>
+  </record>
+
+  <record id="view_estate_unit_form_inherit_contract_buttons" model="ir.ui.view">
+    <field name="name">estate.building.unit.form.contract.buttons</field>
+    <field name="model">estate.building.unit</field>
+    <field name="inherit_id" ref="estate_rent_mgmt.view_estate_unit_form"/>
+    <field name="arch" type="xml">
+      <xpath expr="//form/sheet" position="inside">
+        <div class="oe_button_box" name="button_box">
+          <button type="object" name="action_new_contract" class="oe_stat_button" icon="fa-plus">
+            <span class="o_stat_text">New Contract</span>
+          </button>
+        </div>
+      </xpath>
+    </field>
+  </record>
+
+  <record id="view_estate_unit_form_inherit_contract_buttons" model="ir.ui.view">
+    <field name="name">estate.building.unit.form.contract.buttons</field>
+    <field name="model">estate.building.unit</field>
+    <field name="inherit_id" ref="estate_rent_mgmt.view_estate_unit_form"/>
+    <field name="arch" type="xml">
+      <xpath expr="//form/sheet" position="inside">
+        <div class="oe_button_box" name="button_box">
+          <button type="object" name="action_open_contracts" class="oe_stat_button" icon="fa-files-o">
+            <field name="contract_count" widget="statinfo" string="Contracts"/>
+          </button>
+          <button type="object" name="action_open_active_contract" class="oe_stat_button" icon="fa-check"
+                  invisible="'active_contract_id' == False">
+            <span class="o_stat_text">Active Contract</span>
+          </button>
+        </div>
+      </xpath>
+
+      <xpath expr="//form/sheet/group" position="inside">
+        <group>
+          <field name="active_contract_id" readonly="1" options="{'no_create': True}"/>
+        </group>
+      </xpath>
+    </field>
   </record>
 </odoo>
