@@ -28,6 +28,7 @@
         "views/inherit_account_move_views.xml",
         "views/estate_menus.xml",
         "views/rent_prepayment_view.xml",
+        "views/utility_views.xml",
         "data/rent_cron.xml",
     ],
     

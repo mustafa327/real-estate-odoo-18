@@ -1,5 +1,6 @@
 from odoo import models, fields, api, _
 
+
 class AccountMove(models.Model):
     _inherit = 'account.move'
 
@@ -9,6 +10,7 @@ class AccountMove(models.Model):
     x_floor = fields.Integer(string='الطابق')
     x_unit_number = fields.Char(string='الشقة')
     x_owner_id = fields.Many2one('res.partner', string='المالك / Owner', domain=[('is_property_owner', '=', True)])
+    contract_id = fields.Many2one('rent.contract', string='Rent Contract')
 
     # Convenience for reporting
     x_tenant_partner_id = fields.Many2one('res.partner', string='المستأجر', compute='_compute_tenant', store=False)

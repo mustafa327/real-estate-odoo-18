@@ -5,3 +5,5 @@ from . import inherit_partner
 from . import inherit_sale_order
 from . import inherit_account_move
 from . import rent_prepayment
+from . import utility_wizard
+from . import utility

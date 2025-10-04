@@ -47,6 +47,8 @@
     </field>
   </record>
 
+
+
   <!-- Optional action/menu (safe to keep or remove) -->
   <record id="action_rent_prepayment" model="ir.actions.act_window">
     <field name="name">Advance Payments</field>

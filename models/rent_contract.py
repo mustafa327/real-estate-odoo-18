@@ -15,13 +15,22 @@ class RentContract(models.Model):
     unit_id = fields.Many2one('estate.building.unit', string='الوحدة/الشقة', required=True, domain="[('building_id','=',building_id)]", tracking=True)
 
     company_id = fields.Many2one('res.company', string='الشركة', default=lambda self: self.env.company, required=True)
-    currency_id = fields.Many2one(related='company_id.currency_id', store=True, readonly=True)
+
+    currency_id = fields.Many2one(
+        'res.currency', string='Currency', required=True, tracking=True,
+        default=lambda self: self.env.company.currency_id
+    )
+
+    company_currency_id = fields.Many2one(
+        'res.currency', string='Company Currency',
+        related='company_id.currency_id', store=False, readonly=True
+    )
 
     responsible_id = fields.Many2one( 'res.users', string='Responsible', default=lambda self: self.env.user, tracking=True, help="User who will receive the payment reminder activity.")
     rent_due_day = fields.Integer(string='Rent Due Day', default=1, tracking=True, help='Day of month the rent is due (1..31).')
     last_due_activity_date = fields.Date(string='Last Due Activity', readonly=True)
 
-    amount = fields.Monetary(string='مبلغ الإيجار', required=True)
+    amount = fields.Monetary(string='مبلغ الإيجار', required=True,  currency_field='currency_id')
     recurrence = fields.Selection([('month', 'شهري'), ('year', 'سنوي')], string='دورية الدفع', default='month', required=True)
 
     start_date = fields.Date(string='تاريخ البداية', required=True)
@@ -34,10 +43,19 @@ class RentContract(models.Model):
         ('cancelled', 'ملغى')
     ], default='draft', tracking=True)
 
-    monthly_amount = fields.Monetary(compute='_compute_normalized', string='شهريًا', store=False)
-    yearly_amount = fields.Monetary(compute='_compute_normalized', string='سنويًا', store=False)
+    monthly_amount = fields.Monetary(compute='_compute_normalized', string='شهريًا', store=False, currency_field='currency_id')
+    yearly_amount = fields.Monetary(compute='_compute_normalized', string='سنويًا', store=False, currency_field='currency_id')
 
     invoice_count = fields.Integer(compute='_compute_invoice_count')
+
+
+    
+    @api.onchange('company_id')
+    def _onchange_company_id_currency(self):
+        for rec in self:
+            if rec.company_id and (not rec.currency_id or rec.currency_id == rec.company_currency_id):
+                # when switching company, default the contract currency to that company’s currency
+                rec.currency_id = rec.company_id.currency_id
 
     @api.depends('partner_id', 'building_id', 'unit_id')
     def _compute_name(self):

@@ -1,0 +1,168 @@
+<odoo>
+  <!-- Root menu (load once) -->
+  <menuitem id="menu_estate_rent_root" name="Estate Rent" sequence="50"/>
+
+  <!-- Actions (define BEFORE views that reference them) -->
+  <record id="action_rent_utility_type" model="ir.actions.act_window">
+    <field name="name">Utility Types</field>
+    <field name="res_model">rent.utility.type</field>
+    <field name="view_mode">tree,form</field>
+  </record>
+
+  <record id="action_rent_utility_expense" model="ir.actions.act_window">
+    <field name="name">Utility Expenses</field>
+    <field name="res_model">rent.utility.expense</field>
+    <field name="view_mode">tree,form</field>
+  </record>
+
+  <record id="action_open_rent_utility_wizard" model="ir.actions.act_window">
+    <field name="name">Add Utilities</field>
+    <field name="res_model">rent.utility.wizard</field>
+    <field name="view_mode">form</field>
+    <field name="target">new</field>
+    <field name="context">{'default_contract_id': active_id}</field>
+  </record>
+
+  <!-- Menus -->
+  <menuitem id="menu_rent_utility_root" name="Utilities"
+            parent="menu_estate_rent_root" sequence="60"/>
+  <menuitem id="menu_rent_utility_types" name="Utility Types"
+            parent="menu_rent_utility_root" action="action_rent_utility_type" sequence="10"/>
+  <menuitem id="menu_rent_utility_expense" name="Utility Expenses"
+            parent="menu_rent_utility_root" action="action_rent_utility_expense" sequence="20"/>
+
+  <!-- Utility Type views -->
+  <record id="view_rent_utility_type_tree" model="ir.ui.view">
+    <field name="name">rent.utility.type.tree</field>
+    <field name="model">rent.utility.type</field>
+    <field name="arch" type="xml">
+      <list>
+        <field name="name"/>
+        <field name="pricing"/>
+        <field name="uom_id"/>
+        <field name="unit_rate"/>
+        <field name="product_id"/>
+      </list>
+    </field>
+  </record>
+
+  <record id="view_rent_utility_type_form" model="ir.ui.view">
+    <field name="name">rent.utility.type.form</field>
+    <field name="model">rent.utility.type</field>
+    <field name="arch" type="xml">
+      <form>
+        <sheet>
+          <group>
+            <field name="name"/>
+            <field name="product_id"/>
+            <field name="pricing"/>
+            <!-- Odoo 17+: use inline expression -->
+            <field name="uom_id" invisible="pricing != 'meter'"/>
+            <field name="unit_rate"/>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <!-- Utility Expense views -->
+  <record id="view_rent_utility_expense_tree" model="ir.ui.view">
+    <field name="name">rent.utility.expense.tree</field>
+    <field name="model">rent.utility.expense</field>
+    <field name="arch" type="xml">
+      <list>
+        <field name="name"/>
+        <field name="contract_id"/>
+        <field name="type_id"/>
+        <field name="period_start"/>
+        <field name="period_end"/>
+        <field name="reading_start" invisible="type_pricing != 'meter'"/>
+        <field name="reading_end" invisible="type_pricing != 'meter'"/>
+        <field name="units"/>
+        <field name="unit_rate"/>
+        <field name="amount"/>
+        <field name="state"/>
+        <field name="invoice_id"/>
+      </list>
+    </field>
+  </record>
+
+  <record id="view_rent_utility_expense_form" model="ir.ui.view">
+    <field name="name">rent.utility.expense.form</field>
+    <field name="model">rent.utility.expense</field>
+    <field name="arch" type="xml">
+      <form>
+        <sheet>
+          <group>
+            <group>
+              <field name="name"/>
+              <field name="contract_id"/>
+              <field name="type_id"/>
+              <field name="period_start"/>
+              <field name="period_end"/>
+              <field name="notes"/>
+            </group>
+            <group>
+              <field name="reading_start" invisible="type_pricing != 'meter'"/>
+              <field name="reading_end" invisible="type_pricing != 'meter'"/>
+              <field name="units" readonly="1"/>
+              <field name="unit_rate"/>
+              <field name="amount"/>
+            </group>
+          </group>
+          <group>
+            <field name="state" readonly="1"/>
+            <field name="invoice_id" readonly="1"/>
+            <field name="move_line_id" readonly="1"/>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <!-- Wizard view -->
+  <record id="view_rent_utility_wizard_form" model="ir.ui.view">
+    <field name="name">rent.utility.wizard.form</field>
+    <field name="model">rent.utility.wizard</field>
+    <field name="arch" type="xml">
+      <form string="Add Utilities to Invoice">
+        <sheet>
+          <group>
+            <field name="contract_id" readonly="1"/>
+            <field name="period_start"/>
+            <field name="period_end"/>
+          </group>
+          <field name="line_ids">
+            <list editable="bottom">
+              <field name="type_id"/>
+              <field name="reading_start" invisible="type_pricing != 'meter'"/>
+              <field name="reading_end" invisible="type_pricing != 'meter'"/>
+              <field name="units" readonly="1"/>
+              <field name="unit_rate"/>
+              <field name="amount"/>
+              <field name="currency_id" invisible="1"/>
+              <field name="notes"/>
+            </list>
+          </field>
+        </sheet>
+        <footer>
+          <button name="action_add_to_invoice" type="object" class="btn btn-primary" string="Add to Invoice"/>
+          <button string="Cancel" class="btn btn-secondary" special="cancel"/>
+        </footer>
+      </form>
+    </field>
+  </record>
+
+  <!-- Inherit Contract form (after action defined) -->
+  <record id="rent_contract_form_inherit_utility_btn" model="ir.ui.view">
+    <field name="name">rent.contract.form.utility.button</field>
+    <field name="model">rent.contract</field>
+    <field name="inherit_id" ref="estate_rent_mgmt.view_rent_contract_form"/>
+    <field name="arch" type="xml">
+      <xpath expr="//header" position="inside">
+        <button name="%(action_open_rent_utility_wizard)d" type="action"
+                string="Add Utilities" class="oe_highlight"/>
+      </xpath>
+    </field>
+  </record>
+</odoo>

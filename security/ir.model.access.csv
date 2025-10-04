@@ -5,3 +5,8 @@ access_rent_contract_user,access.rent.contract.user,model_rent_contract,base.gro
 
 access_rent_prepayment_user,rent_prepayment_user,model_rent_prepayment,base.group_user,1,1,1,1
 access_rent_prepayment_consumption_user,rent_prepayment_consumption_user,model_rent_prepayment_consumption,base.group_user,1,1,1,1
+
+access_rent_utility_type_user,rent.utility.type,model_rent_utility_type,base.group_user,1,1,1,1
+access_rent_utility_expense_user,rent.utility.expense,model_rent_utility_expense,base.group_user,1,1,1,1
+access_rent_utility_wizard_user,rent.utility.wizard,model_rent_utility_wizard,base.group_user,1,1,1,1
+access_rent_utility_wizard_line_user,rent.utility.wizard.line,model_rent_utility_wizard_line,base.group_user,1,1,1,1
